@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="AppName">EasyCard</string>
+    <string id="MenuTitle">Loyalty cards</string>
+    <string id="QrUnsupported">QR codes are not supported on this device. Open easycard.meertens.dev on your phone instead.</string>
+</strings>

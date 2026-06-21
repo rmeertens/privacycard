@@ -16,3 +16,9 @@ Live at https://easycard.meertens.dev.
 All loyalty cards live in [`stores.js`](./stores.js). Update the `code`
 field to change a barcode. Add a new entry to add a new supermarket, then
 add the matching URL to `sitemap.xml`.
+
+## Garmin watch app
+
+A Connect IQ port for the fēnix 7 Pro (and other fēnix 7 family devices)
+lives in [`garmin/`](./garmin). See [`garmin/README.md`](./garmin/README.md)
+for build instructions.
