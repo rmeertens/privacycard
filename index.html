@@ -15,6 +15,7 @@
   <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXWYNZC7YH"></script>
   <script>
@@ -86,24 +87,33 @@
         a.className = 'store-card';
         a.href = 'card.html?id=' + encodeURIComponent(s.id);
         const svgId = 'bc-' + s.id;
+        const isQR = (s.format || '').toUpperCase() === 'QR';
         a.innerHTML = `
           <div class="store-name">${s.emoji} ${s.name}</div>
           <div class="store-program">${s.program}</div>
           <div class="country">${s.country}</div>
           <div class="swatch" style="background:${s.color}"></div>
-          <div class="mini-barcode"><svg id="${svgId}"></svg></div>
+          <div class="mini-barcode${isQR ? ' qr' : ''}"><svg id="${svgId}"></svg></div>
         `;
         grid.appendChild(a);
         try {
-          JsBarcode('#' + svgId, s.code, {
-            format: s.format || 'CODE128',
-            width: 1.6,
-            height: 50,
-            displayValue: false,
-            margin: 0,
-            background: '#ffffff',
-            lineColor: '#000000'
-          });
+          if (isQR) {
+            const qr = qrcode(0, 'M');
+            qr.addData(s.code);
+            qr.make();
+            document.getElementById(svgId).closest('.mini-barcode').innerHTML =
+              qr.createSvgTag({ cellSize: 3, margin: 1 });
+          } else {
+            JsBarcode('#' + svgId, s.code, {
+              format: s.format || 'CODE128',
+              width: 1.6,
+              height: 50,
+              displayValue: false,
+              margin: 0,
+              background: '#ffffff',
+              lineColor: '#000000'
+            });
+          }
         } catch (err) { /* skip invalid */ }
       }
     }

@@ -132,6 +132,8 @@ h2 { font-size: 1.4rem; margin: 28px 0 12px; }
   padding: 8px 6px 4px;
 }
 .store-card .mini-barcode svg { display: block; width: 100%; height: auto; }
+.store-card .mini-barcode.qr { display: flex; justify-content: center; padding: 8px; }
+.store-card .mini-barcode.qr svg { width: auto; height: 96px; }
 
 .card-panel {
   background: var(--panel);
@@ -149,6 +151,7 @@ h2 { font-size: 1.4rem; margin: 28px 0 12px; }
   margin: 18px 0 10px;
 }
 .barcode-stage svg { max-width: 100%; height: auto; }
+.barcode-stage.qr svg { width: 220px; max-width: 80%; }
 
 .code-text {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

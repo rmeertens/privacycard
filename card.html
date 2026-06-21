@@ -9,6 +9,7 @@
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXWYNZC7YH"></script>
   <script>
@@ -59,14 +60,17 @@
     if (!store) {
       card.innerHTML = '<h1>Card not found</h1><p>Try one from <a href="/">the list</a>.</p>';
     } else {
-      document.title = `${store.name} ${store.program} barcode — EasyCard`;
-      const desc = `Scan this ${store.name} ${store.program} barcode at the till for member prices. No sign-up needed.`;
+      const isQR = (store.format || '').toUpperCase() === 'QR';
+      const codeWord = isQR ? 'QR code' : 'barcode';
+
+      document.title = `${store.name} ${store.program} ${codeWord} — EasyCard`;
+      const desc = `Scan this ${store.name} ${store.program} ${codeWord} at the till for member prices. No sign-up needed.`;
       document.querySelector('meta[name=description]').setAttribute('content', desc);
 
       card.innerHTML = `
         <h1>${store.emoji} ${store.name}</h1>
         <p class="lead">${store.program} · ${store.country}</p>
-        <div class="barcode-stage">
+        <div class="barcode-stage${isQR ? ' qr' : ''}">
           <svg id="barcode"></svg>
         </div>
         <div style="text-align:center; margin: 4px 0 14px;">
@@ -78,24 +82,35 @@
           <button class="btn" id="copy">Copy number</button>
         </div>
         <p style="color:var(--muted); margin-top:18px; font-size:0.9rem;">
-          Tip: turn screen brightness up so the scanner reads the barcode reliably.
+          Tip: turn screen brightness up so the scanner reads the ${codeWord} reliably.
         </p>
       `;
 
+      function renderQR(target, cellSize) {
+        const qr = qrcode(0, 'M');
+        qr.addData(store.code);
+        qr.make();
+        target.innerHTML = qr.createSvgTag({ cellSize: cellSize, margin: 2 });
+      }
+
       try {
-        JsBarcode("#barcode", store.code, {
-          format: store.format || "EAN13",
-          width: 2.6,
-          height: 110,
-          displayValue: true,
-          fontSize: 16,
-          margin: 8,
-          background: "#ffffff",
-          lineColor: "#000000"
-        });
+        if (isQR) {
+          renderQR(document.querySelector('.barcode-stage'), 6);
+        } else {
+          JsBarcode("#barcode", store.code, {
+            format: store.format || "EAN13",
+            width: 2.6,
+            height: 110,
+            displayValue: true,
+            fontSize: 16,
+            margin: 8,
+            background: "#ffffff",
+            lineColor: "#000000"
+          });
+        }
       } catch (err) {
         document.querySelector('.barcode-stage').innerHTML =
-          '<p style="color:#b00">Could not render barcode: ' + err.message + '</p>';
+          '<p style="color:#b00">Could not render ' + codeWord + ': ' + err.message + '</p>';
       }
 
       document.getElementById('copy').addEventListener('click', () => {
@@ -110,22 +125,24 @@
       document.getElementById('fullscreen').addEventListener('click', () => {
         const overlay = document.createElement('div');
         overlay.className = 'scan-overlay';
-        overlay.innerHTML = `
-          <svg id="bigBarcode"></svg>
-          <div class="scan-hint">Tap anywhere to close · tap card to rotate</div>
-        `;
+        const hint = '<div class="scan-hint">Tap anywhere to close · tap code to rotate</div>';
+        overlay.innerHTML = `<div class="scan-code"><svg id="bigBarcode"></svg></div>${hint}`;
         document.body.appendChild(overlay);
         try {
-          JsBarcode("#bigBarcode", store.code, {
-            format: store.format || "CODE128",
-            width: 3,
-            height: 180,
-            displayValue: true,
-            fontSize: 22,
-            margin: 12,
-            background: "#ffffff",
-            lineColor: "#000000"
-          });
+          if (isQR) {
+            renderQR(overlay.querySelector('.scan-code'), 12);
+          } else {
+            JsBarcode("#bigBarcode", store.code, {
+              format: store.format || "CODE128",
+              width: 3,
+              height: 180,
+              displayValue: true,
+              fontSize: 22,
+              margin: 12,
+              background: "#ffffff",
+              lineColor: "#000000"
+            });
+          }
         } catch (err) {}
         const svg = overlay.querySelector('svg');
         svg.addEventListener('click', e => {

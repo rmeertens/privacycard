@@ -36,6 +36,18 @@ window.STORES = [
     note: "4 points per £1 spent."
   },
 
+  {
+    id: "coop",
+    name: "Co-op",
+    program: "Membership",
+    country: "United Kingdom",
+    emoji: "🇬🇧",
+    color: "#00B1E7",
+    code: "633174913710764145",
+    format: "QR",
+    note: "Scan the QR code at the till to earn Co-op Membership rewards."
+  },
+
   // ─── Netherlands ──────────────────────────────────────────────────
   {
     id: "albert-heijn",
