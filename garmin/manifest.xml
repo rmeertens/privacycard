@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
     <iq:application
-        entry="EasyCardApp"
+        entry="PrivacyCardApp"
         id="f848802a8e7c4b10963ba36a42e8539a"
         launcherIcon="@Drawables.LauncherIcon"
         minApiLevel="3.2.0"

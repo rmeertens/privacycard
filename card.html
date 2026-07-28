@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Loyalty barcode — EasyCard</title>
+  <title>Loyalty barcode — PrivacyCard</title>
   <meta name="description" content="Scan this loyalty card barcode at the supermarket till to get member prices." />
   <meta name="theme-color" content="#0f1115" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -23,8 +23,8 @@
   <div class="container">
     <header class="site-header">
       <a class="logo" href="/">
-        <span class="badge">EC</span>
-        <span>EasyCard</span>
+        <span class="badge">PC</span>
+        <span>PrivacyCard</span>
       </a>
       <nav class="site-nav">
         <a href="/">Cards</a>
@@ -39,7 +39,7 @@
     </div>
 
     <footer>
-      <span>© <span id="year"></span> EasyCard · <a href="/sitemap.xml">Sitemap</a></span>
+      <span>© <span id="year"></span> PrivacyCard · <a href="/sitemap.xml">Sitemap</a></span>
       <span>Made by <a href="https://meertens.dev">Roland Meertens</a></span>
     </footer>
   </div>
@@ -63,7 +63,7 @@
       const isQR = (store.format || '').toUpperCase() === 'QR';
       const codeWord = isQR ? 'QR code' : 'barcode';
 
-      document.title = `${store.name} ${store.program} ${codeWord} — EasyCard`;
+      document.title = `${store.name} ${store.program} ${codeWord} — PrivacyCard`;
       const desc = `Scan this ${store.name} ${store.program} ${codeWord} at the till for member prices. No sign-up needed.`;
       document.querySelector('meta[name=description]').setAttribute('content', desc);
 

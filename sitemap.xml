@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://easycard.meertens.dev/</loc></url>
-  <url><loc>https://easycard.meertens.dev/about.html</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=tesco</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=sainsburys</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=boots</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=coop</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=albert-heijn</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=jumbo</loc></url>
-  <url><loc>https://easycard.meertens.dev/card.html?id=kruidvat</loc></url>
+  <url><loc>https://privacycard.meertens.dev/</loc></url>
+  <url><loc>https://privacycard.meertens.dev/about.html</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=tesco</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=sainsburys</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=boots</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=coop</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=albert-heijn</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=jumbo</loc></url>
+  <url><loc>https://privacycard.meertens.dev/card.html?id=kruidvat</loc></url>
 </urlset>

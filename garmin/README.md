@@ -1,7 +1,7 @@
-# EasyCard for Garmin
+# PrivacyCard for Garmin
 
 A Connect IQ watch app that shows the same loyalty-card barcodes as
-[easycard.meertens.dev](https://easycard.meertens.dev), but on your wrist.
+[privacycard.meertens.dev](https://privacycard.meertens.dev), but on your wrist.
 Primary target: **fēnix 7 Pro**. Other fēnix 7 family devices are listed in
 the manifest and should also build.
 
@@ -23,7 +23,7 @@ garmin/
 │   ├── drawables/            # Launcher icon
 │   └── strings/              # User-facing strings
 ├── source/
-│   ├── EasyCardApp.mc        # Application entry point
+│   ├── PrivacyCardApp.mc      # Application entry point
 │   ├── Stores.mc             # Store list + pre-computed CODE128 bar strings
 │   ├── StoreListView.mc      # Menu of stores
 │   └── BarcodeView.mc        # Barcode renderer
@@ -41,7 +41,7 @@ cd garmin
 monkeyc \
     -d fenix7pro \
     -f monkey.jungle \
-    -o bin/EasyCard.prg \
+    -o bin/PrivacyCard.prg \
     -y ~/.Garmin/ConnectIQ/developer_key.der
 ```
 
@@ -49,10 +49,10 @@ To run in the simulator:
 
 ```bash
 connectiq          # launch the simulator
-monkeydo bin/EasyCard.prg fenix7pro
+monkeydo bin/PrivacyCard.prg fenix7pro
 ```
 
-To side-load onto a real watch, copy `bin/EasyCard.prg` to the
+To side-load onto a real watch, copy `bin/PrivacyCard.prg` to the
 `GARMIN/APPS/` directory on the device over USB.
 
 ## Adding a store

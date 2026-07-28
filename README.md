@@ -1,15 +1,15 @@
-# easycard
+# privacycard
 
 Tiny static site that hosts loyalty card barcodes for major supermarkets
 (Albert Heijn, Tesco, Sainsbury's, Lidl, Carrefour, …) so shoppers can scan
 to get member discounts without registering an account.
 
-Live at https://easycard.meertens.dev.
+Live at https://privacycard.meertens.dev.
 
 ## Stack
 - Plain HTML/CSS/JS, no build step.
 - [JsBarcode](https://github.com/lindell/JsBarcode) via CDN renders the barcode client-side.
-- Deployed via GitHub Pages (CNAME → `easycard.meertens.dev`).
+- Deployed via GitHub Pages (CNAME → `privacycard.meertens.dev`).
 
 ## Edit a store
 

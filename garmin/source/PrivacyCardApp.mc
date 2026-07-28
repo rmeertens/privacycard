@@ -1,7 +1,7 @@
 using Toybox.Application;
 using Toybox.WatchUi;
 
-class EasyCardApp extends Application.AppBase {
+class PrivacyCardApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
