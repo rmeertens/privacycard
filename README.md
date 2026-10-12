@@ -17,6 +17,14 @@ All loyalty cards live in [`stores.js`](./stores.js). Update the `code`
 field to change a barcode. Add a new entry to add a new supermarket, then
 add the matching URL to `sitemap.xml`.
 
+## Conversation starters
+
+[`conversation.html`](./conversation.html) is a language-practice page with
+open questions to write about. Each question reveals hints one level at a
+time (words → things → verbs → grammar → example sentences). Questions and
+hints live in [`starters.js`](./starters.js); add a language by adding a new
+key there.
+
 ## Garmin watch app
 
 A Connect IQ port for the fēnix 7 Pro (and other fēnix 7 family devices)

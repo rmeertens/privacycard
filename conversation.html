@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conversation starters — PrivacyCard</title>
+  <meta name="description" content="Conversation starters for practising Dutch or English: write a short answer and reveal progressive hints — words, things, verbs, grammar and example sentences." />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="canonical" href="https://privacycard.meertens.dev/conversation.html" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+  <meta property="og:title" content="Conversation starters — PrivacyCard" />
+  <meta property="og:description" content="Write about everyday questions with step-by-step hints." />
+  <meta property="og:url" content="https://privacycard.meertens.dev/conversation.html" />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXWYNZC7YH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXWYNZC7YH');
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <a class="logo" href="/">
+        <span class="badge">PC</span>
+        <span>PrivacyCard</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">Cards</a>
+        <a href="/conversation.html">Conversation starters</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+
+    <h1>Conversation starters</h1>
+    <p class="lead">
+      Pick a question and write a few sentences about it. Stuck? Reveal hints
+      one at a time — first words, then things, verbs, a grammar point and
+      finally example sentences that grow from simple to more interesting.
+      Tap a hint to add it to your answer.
+    </p>
+
+    <div class="starter-toolbar">
+      <div id="lang" class="lang-toggle" role="tablist" aria-label="Practice language"></div>
+      <button id="shuffle" class="btn" type="button">🎲 Random question</button>
+    </div>
+
+    <div id="starters" class="starters"></div>
+
+    <footer>
+      <span>© <span id="year"></span> PrivacyCard · <a href="/">Cards</a> · <a href="/about.html">About</a> · <a href="/sitemap.xml">Sitemap</a></span>
+      <span>Made by <a href="https://meertens.dev">Roland Meertens</a></span>
+    </footer>
+  </div>
+
+  <script src="starters.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const langEl = document.getElementById('lang');
+    const list = document.getElementById('starters');
+
+    function load(key, fallback) {
+      try { const v = localStorage.getItem(key); return v === null ? fallback : v; }
+      catch (e) { return fallback; }
+    }
+    function save(key, value) {
+      try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
+    }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    let lang = new URLSearchParams(location.search).get('lang') || load('starters-lang', 'nl');
+    if (!STARTERS[lang]) lang = 'nl';
+
+    // Chips insert their text without the bracketed past form, e.g. "kopen (gekocht)" → "kopen".
+    function insertText(item) {
+      return item.replace(/\s*\(.*\)\s*$/, '');
+    }
+
+    function insertAtCursor(textarea, text) {
+      const start = textarea.selectionStart ?? textarea.value.length;
+      const end = textarea.selectionEnd ?? textarea.value.length;
+      const before = textarea.value.slice(0, start);
+      const after = textarea.value.slice(end);
+      const pad = before && !/\s$/.test(before) ? ' ' : '';
+      textarea.value = before + pad + text + after;
+      const pos = (before + pad + text).length;
+      textarea.focus();
+      textarea.setSelectionRange(pos, pos);
+      textarea.dispatchEvent(new Event('input'));
+    }
+
+    function renderHint(hint, level) {
+      const items = (hint.items || []).map(it => Array.isArray(it) ? it : [it, '']);
+      const isSentences = hint.label === 'Build it up' || hint.label === 'Grammar';
+      const body = isSentences
+        ? `<ul class="hint-sentences">${items.map(([t, g]) =>
+            `<li><button type="button" class="hint-sentence" data-insert="${esc(t)}">${esc(t)}</button>${g ? `<span class="gloss">${esc(g)}</span>` : ''}</li>`
+          ).join('')}</ul>`
+        : `<div class="chips">${items.map(([t, g]) =>
+            `<button type="button" class="chip" data-insert="${esc(insertText(t))}">${esc(t)}${g ? `<span class="gloss">${esc(g)}</span>` : ''}</button>`
+          ).join('')}</div>`;
+      return `
+        <div class="hint">
+          <div class="hint-label">${level}. ${esc(hint.label)}</div>
+          ${hint.title ? `<div class="hint-title">${esc(hint.title)}</div>` : ''}
+          ${hint.text ? `<p class="hint-text">${esc(hint.text)}</p>` : ''}
+          ${body}
+        </div>`;
+    }
+
+    function renderStarter(q) {
+      const card = document.createElement('section');
+      card.className = 'starter card-panel';
+      card.id = 'q-' + q.id;
+      const draftKey = `starters-draft-${lang}-${q.id}`;
+      let shown = 0;
+
+      card.innerHTML = `
+        <h2 class="starter-q" lang="${lang}">${esc(q.q)}</h2>
+        ${q.en ? `<p class="starter-en">${esc(q.en)}</p>` : ''}
+        <textarea class="starter-answer" rows="3" placeholder="Write your answer…" aria-label="Your answer"></textarea>
+        <div class="starter-meta"><span class="word-count">0 words</span></div>
+        <div class="hints"></div>
+        <div class="actions">
+          <button type="button" class="btn primary next-hint"></button>
+          <button type="button" class="btn reset-hints" hidden>Hide hints</button>
+        </div>`;
+
+      const textarea = card.querySelector('textarea');
+      const count = card.querySelector('.word-count');
+      const hintsEl = card.querySelector('.hints');
+      const nextBtn = card.querySelector('.next-hint');
+      const resetBtn = card.querySelector('.reset-hints');
+
+      function updateCount() {
+        const n = textarea.value.trim() ? textarea.value.trim().split(/\s+/).length : 0;
+        count.textContent = n + (n === 1 ? ' word' : ' words');
+      }
+      function updateButtons() {
+        const total = q.hints.length;
+        if (shown < total) {
+          nextBtn.hidden = false;
+          nextBtn.textContent = `💡 Hint ${shown + 1} of ${total}: ${q.hints[shown].label}`;
+        } else {
+          nextBtn.hidden = true;
+        }
+        resetBtn.hidden = shown === 0;
+      }
+
+      textarea.value = load(draftKey, '');
+      updateCount();
+      textarea.addEventListener('input', () => { save(draftKey, textarea.value); updateCount(); });
+
+      nextBtn.addEventListener('click', () => {
+        hintsEl.insertAdjacentHTML('beforeend', renderHint(q.hints[shown], shown + 1));
+        shown++;
+        updateButtons();
+      });
+      resetBtn.addEventListener('click', () => {
+        hintsEl.innerHTML = '';
+        shown = 0;
+        updateButtons();
+      });
+      hintsEl.addEventListener('click', e => {
+        const btn = e.target.closest('[data-insert]');
+        if (btn) insertAtCursor(textarea, btn.dataset.insert);
+      });
+
+      updateButtons();
+      return card;
+    }
+
+    function render() {
+      langEl.innerHTML = Object.entries(STARTERS).map(([key, l]) =>
+        `<button type="button" role="tab" class="btn${key === lang ? ' primary' : ''}" aria-selected="${key === lang}" data-lang="${key}">${l.flag} ${esc(l.name)}</button>`
+      ).join('');
+      list.innerHTML = '';
+      for (const q of STARTERS[lang].questions) list.appendChild(renderStarter(q));
+    }
+
+    langEl.addEventListener('click', e => {
+      const btn = e.target.closest('[data-lang]');
+      if (!btn || btn.dataset.lang === lang) return;
+      lang = btn.dataset.lang;
+      save('starters-lang', lang);
+      render();
+    });
+
+    document.getElementById('shuffle').addEventListener('click', () => {
+      const qs = STARTERS[lang].questions;
+      const q = qs[Math.floor(Math.random() * qs.length)];
+      const card = document.getElementById('q-' + q.id);
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.remove('flash');
+      void card.offsetWidth;
+      card.classList.add('flash');
+      card.querySelector('textarea').focus({ preventScroll: true });
+    });
+
+    render();
+  </script>
+</body>
+</html>

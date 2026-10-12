@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://privacycard.meertens.dev/</loc></url>
   <url><loc>https://privacycard.meertens.dev/about.html</loc></url>
+  <url><loc>https://privacycard.meertens.dev/conversation.html</loc></url>
   <url><loc>https://privacycard.meertens.dev/card.html?id=tesco</loc></url>
   <url><loc>https://privacycard.meertens.dev/card.html?id=sainsburys</loc></url>
   <url><loc>https://privacycard.meertens.dev/card.html?id=boots</loc></url>
